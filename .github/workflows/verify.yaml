@@ -82,7 +82,7 @@ jobs:
         run: git fetch origin refs/notes/*:refs/notes/*
 
       - name: Build with maven
-        run: mvn --activate-profiles ci --no-transfer-progress -Dmvntia.git.notes.ref=refs/notes/tests-${{matrix.os}}-${{matrix.java}} install
+        run: mvn --activate-profiles ci --no-transfer-progress "-Dmvntia.git.notes.ref=refs/notes/tests-${{matrix.os}}-${{matrix.java}}" install
 
       - name: Upload TIA data
         if: ${{ github.event_name == 'push' }}
