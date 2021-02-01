@@ -73,6 +73,9 @@ jobs:
           restore-keys: |
             ${{ matrix.os }}-maven-
 
+      - name: Download TIA data
+        run: git fetch origin refs/notes/tests
+
       - name: Build with maven
         run: mvn --activate-profiles ci --no-transfer-progress install
 
