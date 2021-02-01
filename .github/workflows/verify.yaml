@@ -54,8 +54,10 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ ubuntu-latest, windows-latest ]
-        java: [ '11', '14' ]
+        os: [ ubuntu-latest ]
+        java: [ '11' ]
+#        os: [ ubuntu-latest, windows-latest ]
+#        java: [ '11', '14' ]
     steps:
       - uses: actions/checkout@v2
 
@@ -73,6 +75,10 @@ jobs:
 
       - name: Build with maven
         run: mvn --activate-profiles ci --no-transfer-progress install
+
+      - name: Upload TIA data
+        if: ${{ github.event_name == 'push' }}
+        run: git push origin refs/notes/tests
 
   artifact:
     name: Publish - GitHub Packages
