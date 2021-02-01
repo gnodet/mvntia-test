@@ -44,7 +44,7 @@ jobs:
       - name: maven-settings-xml-action
         uses: whelk-io/maven-settings-xml-action@v14
         with:
-          servers: '[{ "id": "github", "username": "${{ env.GITHUB_ACTOR }}", "password": "${{ secrets.GITHUB_TOKEN }}" }]'
+          servers: '[{ "id": "github", "username": "${{ GITHUB_ACTOR }}", "password": "${{ secrets.GITHUB_TOKEN }}" }]'
 
       - name: Build with maven
         run: mvn --activate-profiles ci --no-transfer-progress package -DskipTests
