@@ -32,7 +32,6 @@ jobs:
       - name: Set up JDK ${{ matrix.java }}
         uses: actions/setup-java@v1
         with:
-          server-id: github
           java-version: ${{ matrix.java }}
 
       - uses: actions/cache@v1
@@ -41,6 +40,11 @@ jobs:
           key: ${{ matrix.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ matrix.os }}-maven-
+
+      - name: maven-settings-xml-action
+        uses: whelk-io/maven-settings-xml-action@v14
+        with:
+          servers: '[{ "id": "github", "username": "${env.GITHUB_ACTOR}", "password": "${env.GITHUB_TOKEN}" }]'
 
       - name: Build with maven
         run: mvn --activate-profiles ci --no-transfer-progress package -DskipTests
