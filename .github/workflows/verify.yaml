@@ -20,37 +20,37 @@ on: [push, pull_request]
 
 jobs:
 
-  compile:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ ubuntu-latest, windows-latest ]
-        java: [ '11' ]
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Set up JDK ${{ matrix.java }}
-        uses: actions/setup-java@v1
-        with:
-          java-version: ${{ matrix.java }}
-
-      - uses: actions/cache@v1
-        with:
-          path: ~/.m2/repository
-          key: ${{ matrix.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ matrix.os }}-maven-
-
-      - name: maven-settings-xml-action
-        uses: whelk-io/maven-settings-xml-action@v14
-        with:
-          servers: '[{ "id": "github", "username": "${{ github.actor }}", "password": "${{ secrets.GITHUB_TOKEN }}" }]'
-
-      - name: Build with maven
-        run: mvn --activate-profiles ci --no-transfer-progress package -DskipTests
+#  compile:
+#    runs-on: ${{ matrix.os }}
+#    strategy:
+#      matrix:
+#        os: [ ubuntu-latest, windows-latest ]
+#        java: [ '11' ]
+#    steps:
+#      - uses: actions/checkout@v2
+#
+#      - name: Set up JDK ${{ matrix.java }}
+#        uses: actions/setup-java@v1
+#        with:
+#          java-version: ${{ matrix.java }}
+#
+#      - uses: actions/cache@v1
+#        with:
+#          path: ~/.m2/repository
+#          key: ${{ matrix.os }}-maven-${{ hashFiles('**/pom.xml') }}
+#          restore-keys: |
+#            ${{ matrix.os }}-maven-
+#
+#      - name: maven-settings-xml-action
+#        uses: whelk-io/maven-settings-xml-action@v14
+#        with:
+#          servers: '[{ "id": "github", "username": "${{ github.actor }}", "password": "${{ secrets.GITHUB_TOKEN }}" }]'
+#
+#      - name: Build with maven
+#        run: mvn --activate-profiles ci --no-transfer-progress package -DskipTests
 
   test:
-    needs: compile
+#    needs: compile
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -66,12 +66,17 @@ jobs:
         with:
           java-version: ${{ matrix.java }}
 
-      - uses: actions/cache@v1
+      - name: maven-settings-xml-action
+        uses: whelk-io/maven-settings-xml-action@v14
         with:
-          path: ~/.m2/repository
-          key: ${{ matrix.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ matrix.os }}-maven-
+          servers: '[{ "id": "github", "username": "${{ github.actor }}", "password": "${{ secrets.GITHUB_TOKEN }}" }]'
+
+#      - uses: actions/cache@v1
+#        with:
+#          path: ~/.m2/repository
+#          key: ${{ matrix.os }}-maven-${{ hashFiles('**/pom.xml') }}
+#          restore-keys: |
+#            ${{ matrix.os }}-maven-
 
       - name: Download TIA data
         run: git fetch origin refs/notes/*:refs/notes/*
