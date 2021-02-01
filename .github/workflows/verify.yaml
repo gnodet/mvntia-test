@@ -74,14 +74,14 @@ jobs:
             ${{ matrix.os }}-maven-
 
       - name: Download TIA data
-        run: git fetch origin refs/notes/tests
+        run: git fetch origin refs/notes/*:refs/notes/*
 
       - name: Build with maven
         run: mvn --activate-profiles ci --no-transfer-progress install
 
       - name: Upload TIA data
         if: ${{ github.event_name == 'push' }}
-        run: git push origin refs/notes/tests
+        run: git push origin refs/notes/*:refs/notes/*
 
 #  artifact:
 #    name: Publish - GitHub Packages
